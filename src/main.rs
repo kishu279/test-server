@@ -16,7 +16,7 @@ async fn root() -> Html<&'static str> {
     Html("<h2>✅ Server is running! Use /balance?walletAdd=...</h2>")
 }
 
-async fn balance_Request(Query(params): Query<HashMap<String, String>>) -> Json<BalanceResponse> {
+async fn balanceRequest(Query(params): Query<HashMap<String, String>>) -> Json<BalanceResponse> {
     let client = RpcClient::new("https://api.devnet.solana.com".to_string());
     if let Some(wallet) = params.get("walletAdd") {
         let pubkey = Pubkey::from_str(wallet).unwrap();
@@ -39,7 +39,7 @@ async fn main() {
     let cors = CorsLayer::new().allow_origin(Any);
     let app = Router::new()
         .route("/", get(root))
-        .route("/balance", get(balance_Request))
+        .route("/balance", get(balanceRequest))
         .layer(cors);
 
     println!("🚀 Server running at http://localhost:3000");

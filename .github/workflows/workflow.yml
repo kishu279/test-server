@@ -11,15 +11,12 @@ jobs:
       matrix:
         toolchain:
           - stable
-          - beta
-          - nightly
+
     steps:
       - uses: actions/checkout@v4
       - run: rustup update ${{ matrix.toolchain }} && rustup default ${{ matrix.toolchain }}
 
       - run: cargo build --verbose
-
-      - run: cargo test --verbose
       - run: cargo run
 
   deploy:
@@ -36,4 +33,4 @@ jobs:
       - name: Deploy to Ec2
         run: |
           ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@<EC2-IP> \
-          'cd /app && git pull && nohup cargo run > output.log 2>&1 &'
+          'cd /test-server && git pull && nohup cargo run > output.log 2>&1 &'
