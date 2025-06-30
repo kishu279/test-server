@@ -35,4 +35,5 @@ jobs:
 
       - name: Deploy to Ec2
         run: |
-          ssh -o StrictHostKeyChecking=no -i key.pem sourav@18.212.169.44 'cd /app && git pull && cargo run'
+          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@<EC2-IP> \
+          'cd /app && git pull && nohup cargo run > output.log 2>&1 &'
