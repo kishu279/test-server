@@ -17,20 +17,19 @@ jobs:
       - run: rustup update ${{ matrix.toolchain }} && rustup default ${{ matrix.toolchain }}
       # - run: git pull origin main
       - run: cargo build --verbose
-      # - run: cargo run
 
-  # deploy:
-  #   name: Deploy to EC2
-  #   needs: build_and_test
-  #   runs-on: ubuntu-latest
+  deploy:
+    name: Deploy to EC2
+    needs: build_and_test
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: Setup ssh key
-  #       run: |
-  #         echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
-  #         chmod 600 key.pem
+    steps:
+      - name: Setup ssh key
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
+          chmod 600 key.pem
 
-  #     - name: Deploy to Ec2
-  #       run: |
-  #         ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@<EC2-IP> \
-  #         'cd /test-server && git pull && nohup cargo run > output.log 2>&1 &'
+      - name: Deploy to Ec2
+        run: |
+          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@<EC2-IP> \
+          'cd /test-server && git pull && nohup cargo run > output.log 2>&1 &'
